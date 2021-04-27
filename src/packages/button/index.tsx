@@ -1,19 +1,25 @@
-import { useButton } from '@react-aria/button';
-import React from 'react';
+import "./button.css";
+import React, { useRef } from "react";
+import { useButton } from "@react-aria/button";
+import { useFocusRing } from "@react-aria/focus";
+import { mergeProps } from "@react-aria/utils";
+import classNames from "classnames";
+import { AriaButtonProps } from "@react-types/button";
 
-function Button(properties: any): JSX.Element {
-  const reference = React.useRef();
-  const { buttonProps } = useButton(properties, reference);
+export default function Button(props: AriaButtonProps<React.ElementType<any>>) {
+  let ref = useRef();
+  //@ts-ignore
+  let { buttonProps, isPressed } = useButton(props, ref);
+  let { focusProps, isFocusVisible } = useFocusRing();
 
   return (
     <button
-  {...buttonProps}
-      ref={reference}
-      className="p-3 bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
+      {...mergeProps(focusProps, buttonProps)}
+      ref={ref}
+      className={'button button--ghost'}
     >
-      {properties.children}
+      {props.children}
     </button>
   );
 }
 
-export default Button;
